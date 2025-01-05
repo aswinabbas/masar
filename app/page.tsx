@@ -5,6 +5,7 @@ import { StoreModel } from "@/stateStorage/store";
 import { useStoreActions } from "easy-peasy";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export default function Home() {
   const setTodo = useStoreActions<StoreModel>((actions) => actions.todos.setToDo);
@@ -45,7 +46,17 @@ export default function Home() {
         <TodoItem />
       </div>
 
-      <span>Reach me on github</span>
+      <span className='flex text-xs text-gray-400 font-light gap-2 items-center'>
+        <GitHubLogoIcon />
+        <a
+          href="https://github.com/aswinabbas/masar"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 underline mr-2"
+        >
+          Source Code
+        </a>
+      </span>
     </div>
   );
 }
