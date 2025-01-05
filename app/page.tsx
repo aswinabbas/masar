@@ -29,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-10 sm:p-20 sm:mt-4 font-[family-name:var(--font-geist-sans)] bg-[#f9fafb]">
+    <div className="grid grid-rows-[auto_1fr_auto] items-start justify-items-center min-h-screen p-8 pb-20 gap-10 sm:p-20 sm:mt-4 font-[family-name:var(--font-geist-sans)] bg-[#f9fafb]">
       {/* Bagian Header dan Form */}
       <div className="flex flex-col w-full gap-2">
         <h1 className="text-center font-semibold text-lg">Tambah Item Belanja</h1>
@@ -51,7 +51,7 @@ export default function Home() {
         )}
       </div>
       {/* Bagian yang Bisa Discrolling */}
-      <div className="w-full max-h-[60vh] overflow-y-auto">
+      <div className="w-full max-h-[60vh] overflow-y-auto flex-col justify-start">
         <TodoItem />
       </div>
 
