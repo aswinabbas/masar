@@ -6,8 +6,10 @@ import { useStoreActions } from "easy-peasy";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 export default function Home() {
+  const [inputValue, setInputValue] = useState(""); // Menambahkan state untuk input value
   const setTodo = useStoreActions<StoreModel>((actions) => actions.todos.setToDo);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,6 +25,7 @@ export default function Home() {
 
     setTodo(name);
     e.currentTarget.reset();
+    setInputValue(""); // Reset input setelah submit
   };
 
   return (
@@ -36,17 +39,23 @@ export default function Home() {
               type="name"
               placeholder="list belanja apa aja..."
               name="name"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)} // Mengatur state saat input berubah
             />
             <Button type="submit">Tambah</Button>
           </div>
         </form>
+        {/* Pesan tambahan muncul saat ada input */}
+        {inputValue && (
+          <span className="text-xs text-gray-500 mt-0">Tekan tombol <span className="text-white bg-black px-1 py-1 text-[10px] rounded-sm">Tambah</span> atau Enter ⤵ </span>
+        )}
       </div>
       {/* Bagian yang Bisa Discrolling */}
       <div className="w-full max-h-[60vh] overflow-y-auto">
         <TodoItem />
       </div>
 
-      <span className='flex text-xs text-gray-400 font-light gap-2 items-center'>
+      <span className="flex text-xs text-gray-400 font-light gap-2 items-center">
         <GitHubLogoIcon />
         <a
           href="https://github.com/aswinabbas/masar"
