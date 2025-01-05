@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { StoreModel } from "@/stateStorage/store";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useState } from "react";
@@ -55,81 +55,103 @@ const TodoItem = () => {
         }
     };
 
-    return (
-        <ul className="mt-0 space-y-3 w-full">
-            {data.length > 0 ? (
-                data.map((value: string, index: number) => (
-                    <li
-                        key={index}
-                        className="flex flex-col border rounded-md border-stone-200 p-2"
-                    >
-                        <div className="flex items-center justify-between">
-                            <label className="flex items-center cursor-pointer w-full">
-                                <input
-                                    type="checkbox"
-                                    checked={!!completed[value]}
-                                    onChange={() => toggleCompleted(value)}
-                                    className="mr-2"
-                                />
-                                <span
-                                    className={`${completed[value] ? "line-through text-stone-400" : ""
-                                        }`}
-                                >
-                                    {value.charAt(0).toUpperCase() + value.slice(1)}
-                                </span>
-                            </label>
-                            <Button
-                                variant={"ghost"}
-                                className="font-medium ml-2"
-                                onClick={() => setIsPriceInputVisible((prev) => ({
-                                    ...prev,
-                                    [value]: !prev[value],
-                                }))}
-                            >
-                                + Harga
-                            </Button>
-                            <Button
-                                variant={"secondary"}
-                                className="font-medium"
-                                onClick={() => deleteData(value)}
-                            >
-                                Hapus
-                            </Button>
-                        </div>
+    // Menghitung total harga
+    const calculateTotalPrice = () => {
+        return Object.values(prices).reduce((total, price) => {
+            const number = parseInt(price.replace(/\D/g, ''), 10); // Menghapus karakter non-digit
+            return total + (isNaN(number) ? 0 : number);
+        }, 0);
+    };
 
-                        {isPriceInputVisible[value] && (
-                            <div className="mt-2 flex items-center space-x-2">
-                                <input
-                                    type="text"
-                                    placeholder="Masukkan harga"
-                                    value={prices[value] || ""}
-                                    onChange={(e) => updatePrice(value, e.target.value)}
-                                    onBlur={() => handlePriceInputBlur(value)}
-                                    onKeyDown={(e) => handleKeyDown(e, value)} // Menambahkan event listener untuk Enter
-                                    className="p-2 border border-stone-300 rounded-md text-sm"
-                                />
+    return (
+        <div>
+            <ul className="mt-0 space-y-3 w-full">
+                {data.length > 0 ? (
+                    data.map((value: string, index: number) => (
+                        <li
+                            key={index}
+                            className="flex flex-col border rounded-md border-stone-200 p-2"
+                        >
+                            <div className="flex items-center justify-between">
+                                <label className="flex items-center cursor-pointer w-full">
+                                    <input
+                                        type="checkbox"
+                                        checked={!!completed[value]}
+                                        onChange={() => toggleCompleted(value)}
+                                        className="mr-2"
+                                    />
+                                    <span
+                                        className={`${completed[value] ? "line-through text-stone-400" : ""
+                                            }`}
+                                    >
+                                        {value.charAt(0).toUpperCase() + value.slice(1)}
+                                    </span>
+                                </label>
                                 <Button
-                                    className="font-medium"
-                                    onClick={() => handlePriceSubmit(value)}
+                                    variant={"ghost"}
+                                    className="font-medium ml-2"
+                                    onClick={() => setIsPriceInputVisible((prev) => ({
+                                        ...prev,
+                                        [value]: !prev[value],
+                                    }))}
                                 >
-                                    Simpan
+                                    + Harga
+                                </Button>
+                                <Button
+                                    variant={"secondary"}
+                                    className="font-medium"
+                                    onClick={() => deleteData(value)}
+                                >
+                                    Hapus
                                 </Button>
                             </div>
-                        )}
 
-                        {prices[value] && (
-                            <span className="text-stone-500 mt-1 text-sm">
-                                Harga: Rp {formatPrice(prices[value])}
-                            </span>
-                        )}
+                            {isPriceInputVisible[value] && (
+                                <div className="mt-2 flex items-center space-x-2">
+                                    <input
+                                        type="number"
+                                        placeholder="Masukkan harga"
+                                        value={prices[value] || ""}
+                                        onChange={(e) => updatePrice(value, e.target.value)}
+                                        onBlur={() => handlePriceInputBlur(value)}
+                                        onKeyDown={(e) => handleKeyDown(e, value)} // Menambahkan event listener untuk Enter
+                                        className="p-2 border border-stone-300 rounded-md text-sm"
+                                    />
+                                    <Button
+                                        className="font-medium"
+                                        onClick={() => handlePriceSubmit(value)}
+                                    >
+                                        Simpan
+                                    </Button>
+                                </div>
+                            )}
+
+                            {prices[value] && (
+                                <span className="text-stone-500 mt-1 text-sm">
+                                    Harga: Rp {formatPrice(prices[value])}
+                                </span>
+                            )}
+                        </li>
+                    ))
+                ) : (
+                    <li className="text-center text-stone-400">
+                        Belum ada list belanja...
                     </li>
-                ))
-            ) : (
-                <li className="text-center text-stone-400">
-                    Belum ada list belanja...
-                </li>
+                )}
+            </ul>
+
+            {/* Menampilkan total harga */}
+            {Object.keys(prices).length > 0 && (
+                <div className="mt-2">
+                    <span className="font-semibold text-slate-400 text-[12px]">
+                        Total Belanja:
+                        <span className="ml-1 font-semibold text-slate-600 text-[12px]">
+                            Rp {formatPrice(calculateTotalPrice().toString())}
+                        </span>
+                    </span>
+                </div>
             )}
-        </ul>
+        </div>
     );
 };
 
